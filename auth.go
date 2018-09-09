@@ -96,6 +96,17 @@ func isUser(username, password string) bool {
 	return false
 }
 
+// 檢查操作權限
+func checkPermission() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		isLogin, _ := c.Get("isLogin")
+
+		if (! isLogin.(bool)) {
+			c.AbortWithStatus(http.StatusUnauthorized)
+		}
+	}
+}
+
 // 檢查是否已登入
 func checkLogin() gin.HandlerFunc {
 	return func(c *gin.Context) {
