@@ -10,3 +10,9 @@ func showLogin(c *gin.Context) {
 		"title": "Login",
 	})
 }
+
+func showRegister(c *gin.Context) {
+	c.HTML(http.StatusOK, "register.html", gin.H{
+		"title": "Register",
+	})
+}
