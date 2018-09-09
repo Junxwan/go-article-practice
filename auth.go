@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"math/rand"
+	"net/http"
 	"strconv"
 )
 
@@ -78,6 +79,13 @@ func register(c *gin.Context) {
 	})
 }
 
+// 登出
+func logout(c *gin.Context) {
+	c.SetCookie("login", "", -1, "", "", false, true)
+
+	c.Redirect(http.StatusTemporaryRedirect, "/")
+}
+
 // 檢查帳號是否正確
 func isUser(username, password string) bool {
 	for _, u := range account {
@@ -91,7 +99,7 @@ func isUser(username, password string) bool {
 // 檢查是否已登入
 func checkLogin() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		if token, err := c.Cookie("login"); err == nil || token != "" {
+		if token, err := c.Cookie("login"); err == nil && token != "" {
 			c.Set("isLogin", true)
 		} else {
 			c.Set("isLogin", false)

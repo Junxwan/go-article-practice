@@ -11,6 +11,7 @@ func webRoute() {
 	router.GET("/", showIndex)
 	router.GET("/login", showLogin)
 	router.POST("/login", attempt)
+	router.GET("/logout", logout)
 	router.GET("/register", showRegister)
 	router.POST("/register", register)
 }
