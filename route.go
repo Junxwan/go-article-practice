@@ -16,6 +16,7 @@ func webRoute() {
 	router.POST("/register", register)
 	router.GET("/article/view/:id", showArticle)
 	router.GET("/create", showCreateArticle)
+	router.POST("/create", createArticle)
 }
 
 // 讀取view

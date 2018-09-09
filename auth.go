@@ -83,7 +83,7 @@ func register(c *gin.Context) {
 func logout(c *gin.Context) {
 	c.SetCookie("login", "", -1, "", "", false, true)
 
-	c.Redirect(http.StatusTemporaryRedirect, "/")
+	c.Redirect(http.StatusFound, "/")
 }
 
 // 檢查帳號是否正確

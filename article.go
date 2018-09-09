@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
+	"net/http"
 	"strconv"
 	"time"
 )
@@ -47,10 +48,25 @@ func showArticle(c *gin.Context) {
 }
 
 // 新增文章頁
-func showCreateArticle(c *gin.Context)  {
+func showCreateArticle(c *gin.Context) {
 	reade(c, "create.html", gin.H{
-		"title":   "新增文章",
+		"title": "新增文章",
 	})
+}
+
+// 新增文章
+func createArticle(c *gin.Context) {
+	title := c.PostForm("title")
+	content := c.PostForm("content")
+
+	articleList = append(articleList, article{
+		ID:        len(articleList) + 1,
+		Title:     title,
+		Content:   content,
+		CreatedAt: now(),
+	})
+
+	c.Redirect(http.StatusFound, "/")
 }
 
 // 取文章
