@@ -1,0 +1,9 @@
+{{ template "header.html" .}}
+
+<h1>{{ .article.Title }}</h1>
+
+<p>{{ .article.Content }}</p>
+
+<p>{{ .article.CreatedAt }}</p>
+
+{{ template "footer.html" .}}

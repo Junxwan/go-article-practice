@@ -14,6 +14,7 @@ func webRoute() {
 	router.GET("/logout", logout)
 	router.GET("/register", showRegister)
 	router.POST("/register", register)
+	router.GET("/article/view/:id", showArticle)
 }
 
 // 讀取view

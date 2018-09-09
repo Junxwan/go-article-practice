@@ -1,7 +1,9 @@
 package main
 
 import (
+	"errors"
 	"github.com/gin-gonic/gin"
+	"strconv"
 	"time"
 )
 
@@ -24,6 +26,35 @@ func showIndex(c *gin.Context) {
 		"title":   "go-article-practice",
 		"article": articleList,
 	})
+}
+
+// 顯示出單一文章
+func showArticle(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	article, err := getArticleByID(id)
+
+	if (err != nil) {
+		reade(c, "result.html", gin.H{
+			"message": err.Error(),
+		})
+	} else {
+		reade(c, "artitcle.html", gin.H{
+			"title":   article.Title,
+			"article": article,
+		})
+	}
+}
+
+// 取文章
+func getArticleByID(id int) (*article, error) {
+	for _, a := range articleList {
+		if a.ID == id {
+			return &a, nil
+		}
+	}
+
+	return nil, errors.New("找不到文章")
 }
 
 // 取得現在時間

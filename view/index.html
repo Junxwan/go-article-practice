@@ -1,11 +1,11 @@
 {{ template "header.html" .}}
 
 {{range .article }}
-    <a href="/article/view/{{.ID}}">
-        <h2>{{.Title}}</h2>
+    <a href="/article/view/{{ .ID }}">
+        <h2>{{ .Title }}</h2>
     </a>
-    <p>{{.Content}}</p>
-    <p>{{.CreatedAt}}</p>
+    <p>{{ .Content }}</p>
+    <p>{{ .CreatedAt }}</p>
 {{end}}
 
 {{ template "footer.html" .}}
