@@ -39,11 +39,18 @@ func showArticle(c *gin.Context) {
 			"message": err.Error(),
 		})
 	} else {
-		reade(c, "artitcle.html", gin.H{
+		reade(c, "article.html", gin.H{
 			"title":   article.Title,
 			"article": article,
 		})
 	}
+}
+
+// 新增文章頁
+func showCreateArticle(c *gin.Context)  {
+	reade(c, "create.html", gin.H{
+		"title":   "新增文章",
+	})
 }
 
 // 取文章
