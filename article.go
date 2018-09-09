@@ -16,16 +16,24 @@ type article struct {
 	CreatedAt string
 }
 
-// 文章列表
-var articleList = []article{
-	article{ID: 1, Title: "Title 1", Content: "body 1", CreatedAt: now()},
+type articleList struct {
+	Article []article
+}
+
+var list articleList
+
+// 初始文章
+func init() {
+	list.Article = []article{
+		article{ID: 1, Title: "Title 1", Content: "body 1", CreatedAt: now()},
+	}
 }
 
 // 首頁
 func showIndex(c *gin.Context) {
 	reade(c, "index.html", gin.H{
 		"title":   "go-article-practice",
-		"article": articleList,
+		"article": list.Article,
 	})
 }
 
@@ -33,7 +41,7 @@ func showIndex(c *gin.Context) {
 func showArticle(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 
-	article, err := getArticleByID(id)
+	article, err := list.getArticle(id)
 
 	if (err != nil) {
 		reade(c, "result.html", gin.H{
@@ -54,30 +62,35 @@ func showCreateArticle(c *gin.Context) {
 	})
 }
 
-// 新增文章
+// 新增文章頁
 func createArticle(c *gin.Context) {
 	title := c.PostForm("title")
 	content := c.PostForm("content")
 
-	articleList = append(articleList, article{
-		ID:        len(articleList) + 1,
-		Title:     title,
-		Content:   content,
-		CreatedAt: now(),
-	})
+	list.addArticle(title, content)
 
 	c.Redirect(http.StatusFound, "/")
 }
 
 // 取文章
-func getArticleByID(id int) (*article, error) {
-	for _, a := range articleList {
+func (a articleList) getArticle(id int) (*article, error) {
+	for _, a := range a.Article {
 		if a.ID == id {
 			return &a, nil
 		}
 	}
 
 	return nil, errors.New("找不到文章")
+}
+
+// 新增文章
+func (a articleList) addArticle(title, content string) {
+	list.Article = append(a.Article, article{
+		ID:        len(a.Article) + 1,
+		Title:     title,
+		Content:   content,
+		CreatedAt: now(),
+	})
 }
 
 // 取得現在時間
