@@ -5,6 +5,7 @@ import (
 	"time"
 )
 
+// 文章結構
 type article struct {
 	ID        int
 	Title     string
@@ -12,10 +13,12 @@ type article struct {
 	CreatedAt string
 }
 
+// 文章列表
 var articleList = []article{
 	article{ID: 1, Title: "Title 1", Content: "body 1", CreatedAt: now()},
 }
 
+// 首頁
 func showIndex(c *gin.Context) {
 	reade(c, "index.html", gin.H{
 		"title":   "go-article-practice",
@@ -23,6 +26,7 @@ func showIndex(c *gin.Context) {
 	})
 }
 
+// 取得現在時間
 func now() string {
 	return time.Now().Format("2006-01-02 15:04:05")
 }

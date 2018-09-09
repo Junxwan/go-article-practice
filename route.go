@@ -15,6 +15,7 @@ func webRoute() {
 	router.POST("/register", register)
 }
 
+// 讀取view
 func reade(c *gin.Context, view string, data gin.H) {
 	isLogin, _ := c.Get("isLogin")
 

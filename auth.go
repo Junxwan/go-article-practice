@@ -6,25 +6,30 @@ import (
 	"strconv"
 )
 
+// 使用者結構
 type user struct {
 	Username string `form:"username" binding:"required,email"`
 	Password string `form:"password" binding:"required"`
 }
 
+// 現已註冊的使用者
 var account = []user{}
 
+// 登入頁
 func showLogin(c *gin.Context) {
 	reade(c, "login.html", gin.H{
 		"title": "Login",
 	})
 }
 
+// 註冊頁
 func showRegister(c *gin.Context) {
 	reade(c, "register.html", gin.H{
 		"title": "Register",
 	})
 }
 
+// 登入
 func login(c *gin.Context) {
 	username, _ := c.GetPostForm("username")
 	password, _ := c.GetPostForm("password")
@@ -44,6 +49,7 @@ func login(c *gin.Context) {
 	}
 }
 
+// 註冊
 func register(c *gin.Context) {
 	var form user
 	message := ""
@@ -67,6 +73,7 @@ func register(c *gin.Context) {
 	})
 }
 
+// 檢查帳號是否正確
 func isUser(username, password string) bool {
 	for _, u := range account {
 		if u.Username == username && u.Password == password {
@@ -76,6 +83,7 @@ func isUser(username, password string) bool {
 	return false
 }
 
+// 檢查是否已登入
 func checkLogin() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if token, err := c.Cookie("login"); err == nil || token != "" {
