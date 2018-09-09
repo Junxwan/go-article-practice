@@ -29,24 +29,29 @@ func showRegister(c *gin.Context) {
 	})
 }
 
-// 登入
-func login(c *gin.Context) {
+// 嘗試登入
+func attempt(c *gin.Context) {
 	username, _ := c.GetPostForm("username")
 	password, _ := c.GetPostForm("password")
 
 	if (isUser(username, password)) {
-		c.SetCookie("login", strconv.FormatInt(rand.Int63(), 20), 3600, "", "", false, true)
-
-		c.Set("isLogin", true)
-
-		reade(c, "result.html", gin.H{
-			"message": "登入成功",
-		})
+		login(c)
 	} else {
 		reade(c, "result.html", gin.H{
 			"message": "登入失敗",
 		})
 	}
+}
+
+// 登入
+func login(c *gin.Context) {
+	c.SetCookie("login", strconv.FormatInt(rand.Int63(), 20), 3600, "", "", false, true)
+
+	c.Set("isLogin", true)
+
+	reade(c, "result.html", gin.H{
+		"message": "登入成功",
+	})
 }
 
 // 註冊
