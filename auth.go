@@ -13,8 +13,12 @@ type user struct {
 	Password string `form:"password" binding:"required"`
 }
 
+type member struct {
+	Account []user
+}
+
 // 現已註冊的使用者
-var account = []user{}
+var account member
 
 // 登入頁
 func showLogin(c *gin.Context) {
@@ -35,7 +39,7 @@ func attempt(c *gin.Context) {
 	username, _ := c.GetPostForm("username")
 	password, _ := c.GetPostForm("password")
 
-	if (isUser(username, password)) {
+	if (account.isUser(username, password)) {
 		login(c)
 	} else {
 		reade(c, "result.html", gin.H{
@@ -64,10 +68,7 @@ func register(c *gin.Context) {
 	password, _ := c.GetPostForm("password")
 
 	if err := c.ShouldBind(&form); err == nil {
-		account = append(account, user{
-			Username: username,
-			Password: password,
-		})
+		account.addUser(username, password)
 
 		message = "恭喜你註冊成功，請前往登入頁做登入"
 	} else {
@@ -86,9 +87,17 @@ func logout(c *gin.Context) {
 	c.Redirect(http.StatusFound, "/")
 }
 
+// 新增會員
+func (a member) addUser(username, password string) {
+	account.Account = append(a.Account, user{
+		Username: username,
+		Password: password,
+	})
+}
+
 // 檢查帳號是否正確
-func isUser(username, password string) bool {
-	for _, u := range account {
+func (a member) isUser(username, password string) bool {
+	for _, u := range a.Account {
 		if u.Username == username && u.Password == password {
 			return true
 		}
