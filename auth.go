@@ -2,7 +2,8 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"net/http"
+	"math/rand"
+	"strconv"
 )
 
 type user struct {
@@ -13,15 +14,34 @@ type user struct {
 var account = []user{}
 
 func showLogin(c *gin.Context) {
-	c.HTML(http.StatusOK, "login.html", gin.H{
+	reade(c, "login.html", gin.H{
 		"title": "Login",
 	})
 }
 
 func showRegister(c *gin.Context) {
-	c.HTML(http.StatusOK, "register.html", gin.H{
+	reade(c, "register.html", gin.H{
 		"title": "Register",
 	})
+}
+
+func login(c *gin.Context) {
+	username, _ := c.GetPostForm("username")
+	password, _ := c.GetPostForm("password")
+
+	if (isUser(username, password)) {
+		c.SetCookie("login", strconv.FormatInt(rand.Int63(), 20), 3600, "", "", false, true)
+
+		c.Set("isLogin", true)
+
+		reade(c, "result.html", gin.H{
+			"message": "登入成功",
+		})
+	} else {
+		reade(c, "result.html", gin.H{
+			"message": "登入失敗",
+		})
+	}
 }
 
 func register(c *gin.Context) {
@@ -42,7 +62,26 @@ func register(c *gin.Context) {
 		message = "帳號密碼輸入有誤請重新填寫"
 	}
 
-	c.HTML(http.StatusOK, "result.html", gin.H{
+	reade(c, "result.html", gin.H{
 		"message": message,
 	})
+}
+
+func isUser(username, password string) bool {
+	for _, u := range account {
+		if u.Username == username && u.Password == password {
+			return true
+		}
+	}
+	return false
+}
+
+func checkLogin() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if token, err := c.Cookie("login"); err == nil || token != "" {
+			c.Set("isLogin", true)
+		} else {
+			c.Set("isLogin", false)
+		}
+	}
 }
